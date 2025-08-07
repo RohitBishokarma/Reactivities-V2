@@ -1,3 +1,5 @@
+using Application.Activities.Queries;
+using Application.Core;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -16,6 +18,14 @@ opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 //console ko netwotk tab mha api fetch garda aako problem le yo rakhnu parxa with middelware pani app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000","https://localhost:3000"));
 builder.Services.AddCors();
+builder.Services.AddMediatR(x =>
+    x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
+//  builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+    // Correct way to configure AddAutoMapper in newer versions
+    builder.Services.AddAutoMapper(cfg => {  }, typeof(MappingProfiles).Assembly); 
+    // Or, to scan the executing assembly:
+    // builder.Services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
